@@ -1,0 +1,2095 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extintores - Gestão e Manutenção</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f6f8;
+    color:#172033;
+}
+
+/* =========================
+   TELA INICIAL
+========================= */
+
+#inicio{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background:#eef1f5;
+    padding:40px;
+}
+
+#inicio h1{
+    font-size:36px;
+    margin-bottom:10px;
+}
+
+#inicio p{
+    color:#666;
+    margin-bottom:35px;
+    font-size:16px;
+}
+
+.escolhas{
+    display:flex;
+    gap:25px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.escolha{
+    width:280px;
+    min-height:180px;
+    border:none;
+    border-radius:10px;
+    color:white;
+    cursor:pointer;
+    padding:25px;
+    transition:.2s;
+}
+
+.escolha:hover{
+    transform:translateY(-5px);
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+}
+
+.escolha h2{
+    font-size:25px;
+    margin:10px 0;
+}
+
+.escolha p{
+    color:#ffffff;
+    margin:0;
+    font-size:15px;
+    font-weight:bold;
+    text-shadow:0 2px 4px rgba(0,0,0,.9);
+}
+
+.gerenteEscolha{
+    background:#214b70;
+}
+
+.operadorEscolha{
+    background:#08704e;
+}
+
+.motoristaEscolha{
+    background:#164e7d;
+}
+
+.iconeEscolha{
+    font-size:40px;
+}
+
+
+/* =========================
+   PAINÉIS
+========================= */
+
+.painel{
+    display:none;
+    min-height:100vh;
+}
+
+.painel.ativo{
+    display:block;
+}
+
+
+/* =========================
+   BOTÃO VOLTAR
+========================= */
+
+.botaoVoltar{
+    position:fixed;
+    top:15px;
+    left:15px;
+    z-index:9999;
+
+    width:40px;
+    height:40px;
+
+    border:none;
+    border-radius:50%;
+
+    background:white;
+    color:#172033;
+
+    font-size:24px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.20);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.botaoVoltar:hover{
+    background:#eeeeee;
+}
+
+
+/* CABEÇALHO */
+
+.cabecalho{
+    height:76px;
+    margin:5px;
+    border-radius:5px;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+.cabecalho h1{
+    font-size:21px;
+    margin-bottom:5px;
+}
+
+.cabecalho p{
+    font-size:14px;
+}
+
+.cabGerente{
+    background:#214b70;
+}
+
+.cabOperador{
+    background:#08704e;
+}
+
+.cabMotorista{
+    background:#164e7d;
+}
+
+
+/* ESTRUTURA */
+
+.sistema{
+    display:flex;
+    min-height:calc(100vh - 86px);
+    margin:5px;
+}
+
+
+/* =========================
+   MENU LATERAL
+========================= */
+
+.menu{
+    width:155px;
+    flex-shrink:0;
+    color:white;
+    display:flex;
+    flex-direction:column;
+}
+
+.menuGerente{
+    background:#112c49;
+}
+
+.menuOperador{
+    background:#073b2c;
+}
+
+.menuMotorista{
+    background:#103a60;
+}
+
+.logo{
+    padding:15px 10px 20px;
+    border-bottom:1px solid rgba(255,255,255,.15);
+}
+
+.logo strong{
+    font-size:16px;
+}
+
+.logo span{
+    display:block;
+    font-size:9px;
+    margin-top:2px;
+}
+
+.logoIcon{
+    color:#e52b35;
+    font-size:21px;
+    margin-right:5px;
+}
+
+.menu ul{
+    list-style:none;
+    padding-top:10px;
+}
+
+.menu li{
+    padding:12px 14px;
+    font-size:12px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.menu li:hover{
+    background:rgba(255,255,255,.1);
+}
+
+.menu li.ativo{
+    background:#1681ef;
+    border-radius:5px;
+    margin:0 6px;
+}
+
+.menuOperador li.ativo{
+    background:#12915f;
+}
+
+.menuFinal{
+    margin-top:auto;
+    border-top:1px solid rgba(255,255,255,.15);
+    padding:12px 10px;
+}
+
+.usuario{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:11px;
+    margin-bottom:12px;
+}
+
+.avatar{
+    width:27px;
+    height:27px;
+    border-radius:50%;
+    background:#dfe3e7;
+    color:#555;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.sair{
+    font-size:11px;
+}
+
+
+/* =========================
+   CONTEÚDO
+========================= */
+
+.conteudo{
+    background:#f7f8fa;
+    flex:1;
+    padding:10px;
+    overflow:hidden;
+}
+
+.barra{
+    background:white;
+    height:38px;
+    border-radius:4px;
+    display:flex;
+    align-items:center;
+    padding:0 12px;
+    box-shadow:0 1px 4px rgba(0,0,0,.08);
+    margin-bottom:12px;
+}
+
+.pesquisa{
+    width:220px;
+    height:25px;
+    border:1px solid #e1e5ea;
+    border-radius:4px;
+    padding:5px 10px;
+    font-size:10px;
+}
+
+.icons{
+    margin-left:auto;
+    font-size:18px;
+    display:flex;
+    gap:15px;
+}
+
+
+/* =========================
+   TÍTULOS
+========================= */
+
+.titulo{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin:8px 5px 12px;
+}
+
+.titulo h2{
+    font-size:19px;
+}
+
+.titulo p{
+    font-size:10px;
+    color:#667085;
+    line-height:16px;
+}
+
+
+/* =========================
+   GERENTE
+========================= */
+
+.saudar{
+    margin-bottom:12px;
+}
+
+.saudar h2{
+    font-size:19px;
+}
+
+.saudar p{
+    font-size:11px;
+    color:#666;
+    margin-top:5px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+    margin-bottom:10px;
+}
+
+.card{
+    background:white;
+    border:1px solid #e2e6ea;
+    border-radius:7px;
+    padding:13px;
+    min-height:92px;
+}
+
+.cardTitulo{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:11px;
+    color:#46505e;
+}
+
+.cardNumero{
+    font-size:25px;
+    font-weight:bold;
+    margin-top:7px;
+}
+
+.cardInfo{
+    font-size:9px;
+    color:#777;
+    margin-top:5px;
+}
+
+.cardIcon{
+    width:30px;
+    height:30px;
+    border-radius:7px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-size:16px;
+}
+
+.vermelho{
+    background:#ed2635;
+}
+
+.verde{
+    background:#16a36d;
+}
+
+.amarelo{
+    background:#f5aa16;
+}
+
+.azul{
+    background:#0877df;
+}
+
+
+/* =========================
+   BOX
+========================= */
+
+.box{
+    background:white;
+    border:1px solid #e1e5ea;
+    border-radius:7px;
+    padding:10px;
+    margin-bottom:10px;
+}
+
+.boxTitulo{
+    font-size:12px;
+    font-weight:bold;
+    margin-bottom:10px;
+    display:flex;
+    justify-content:space-between;
+}
+
+.verTodos{
+    color:#1672d4;
+    font-size:9px;
+}
+
+
+/* =========================
+   GRÁFICO
+========================= */
+
+.grafico{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    min-height:130px;
+}
+
+.donut{
+    width:105px;
+    height:105px;
+    border-radius:50%;
+    background:conic-gradient(
+        #16a36d 0 85.5%,
+        #f5aa16 85.5% 100%
+    );
+    position:relative;
+}
+
+.donut:after{
+    content:"";
+    position:absolute;
+    width:60px;
+    height:60px;
+    background:white;
+    border-radius:50%;
+    top:22px;
+    left:22px;
+}
+
+.donutTexto{
+    position:absolute;
+    z-index:2;
+    top:38px;
+    left:32px;
+    text-align:center;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.donutTexto span{
+    display:block;
+    font-size:9px;
+    font-weight:normal;
+}
+
+.legenda{
+    font-size:10px;
+    line-height:25px;
+}
+
+.bola{
+    display:inline-block;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    margin-right:6px;
+}
+
+
+/* =========================
+   TABELAS
+========================= */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:9px;
+}
+
+th{
+    background:#f5f7f9;
+    text-align:left;
+    padding:8px 6px;
+}
+
+td{
+    padding:8px 6px;
+    border-bottom:1px solid #edf0f2;
+}
+
+.status{
+    padding:3px 6px;
+    border-radius:8px;
+    font-size:8px;
+}
+
+.status.verde{
+    background:#d8f4e8;
+    color:#168257;
+}
+
+.status.amarelo{
+    background:#fff0c9;
+    color:#a87300;
+}
+
+.status.azulStatus{
+    background:#dbeeff;
+    color:#1874bd;
+}
+
+.status.vermelhoStatus{
+    background:#ffe0e0;
+    color:#c32727;
+}
+
+
+/* =========================
+   BOTÕES INFERIORES
+========================= */
+
+.botoesInferiores{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+}
+
+.botaoInferior{
+    background:white;
+    border:1px solid #e0e5e9;
+    border-radius:6px;
+    padding:13px 7px;
+    text-align:center;
+    font-size:10px;
+}
+
+.botaoInferior span{
+    display:block;
+    color:#1776d2;
+    font-size:18px;
+    margin-bottom:5px;
+}
+
+.botaoInferior small{
+    font-size:8px;
+}
+
+
+/* =========================
+   OPERADOR
+========================= */
+
+.acoes{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-bottom:10px;
+}
+
+.acao{
+    min-height:76px;
+    border-radius:6px;
+    padding:12px;
+    color:white;
+    text-align:center;
+    border:none;
+}
+
+.acao h3{
+    font-size:11px;
+    margin:7px 0 4px;
+}
+
+.acao p{
+    font-size:8px;
+}
+
+.acaoVerde{
+    background:#15965e;
+}
+
+.acaoAzul{
+    background:#0879d5;
+}
+
+.acaoCinza{
+    background:#75849a;
+}
+
+.infoBox{
+    background:#e2f7ed;
+    border:1px solid #c7eede;
+    padding:12px;
+    border-radius:6px;
+    font-size:10px;
+    color:#176b4b;
+}
+
+.aviso{
+    margin-top:8px;
+}
+
+
+/* =========================
+   MOTORISTA
+========================= */
+
+.resumoMotorista{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-bottom:10px;
+}
+
+.miniCard{
+    background:white;
+    border:1px solid #e1e5e9;
+    border-radius:6px;
+    padding:12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.miniIcon{
+    color:#1676c9;
+    font-size:19px;
+}
+
+.miniCard strong{
+    display:block;
+    font-size:15px;
+}
+
+.miniCard span{
+    font-size:8px;
+    color:#777;
+}
+
+
+/* =========================
+   MAPA
+========================= */
+
+.mapaArea{
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:8px;
+}
+
+.mapa{
+    height:320px;
+    border-radius:5px;
+    border:1px solid #dce2e7;
+    position:relative;
+    overflow:hidden;
+    background:
+        linear-gradient(25deg,transparent 45%,#d5e0e7 46%,transparent 48%),
+        linear-gradient(150deg,transparent 40%,#d5e0e7 41%,transparent 43%),
+        linear-gradient(80deg,transparent 60%,#d5e0e7 61%,transparent 63%),
+        #e9edf0;
+}
+
+.rua{
+    position:absolute;
+    height:5px;
+    background:#2990db;
+    border-radius:5px;
+    transform-origin:left;
+}
+
+.r1{
+    width:150px;
+    top:70px;
+    left:30px;
+    transform:rotate(15deg);
+}
+
+.r2{
+    width:190px;
+    top:105px;
+    left:80px;
+    transform:rotate(70deg);
+}
+
+.r3{
+    width:140px;
+    top:220px;
+    left:90px;
+    transform:rotate(-40deg);
+}
+
+.r4{
+    width:160px;
+    top:245px;
+    left:160px;
+    transform:rotate(-100deg);
+}
+
+.ponto{
+    position:absolute;
+    width:18px;
+    height:18px;
+    background:#1675c8;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:8px;
+    border:2px solid white;
+}
+
+.p1{top:55px;left:170px}
+.p2{top:130px;left:75px}
+.p3{top:190px;left:230px}
+.p4{top:255px;left:125px}
+.p5{top:90px;left:250px}
+
+.rotas{
+    background:white;
+    border:1px solid #e0e4e8;
+    border-radius:5px;
+}
+
+.rota{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:9px;
+    border-bottom:1px solid #edf0f2;
+}
+
+.numero{
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    background:#707c8b;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:9px;
+}
+
+.rota:first-child .numero,
+.rota:nth-child(2) .numero,
+.rota:nth-child(3) .numero{
+    background:#16a36d;
+}
+
+.rotaTexto{
+    font-size:9px;
+}
+
+.rotaTexto strong{
+    display:block;
+    font-size:10px;
+    margin-bottom:3px;
+}
+
+.rotaTexto span{
+    color:#777;
+}
+
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media(max-width:900px){
+
+    .sistema{
+        display:block;
+    }
+
+    .menu{
+        width:100%;
+        min-height:auto;
+    }
+
+    .menu ul{
+        display:flex;
+        overflow:auto;
+    }
+
+    .menu li{
+        white-space:nowrap;
+    }
+
+    .menuFinal{
+        display:none;
+    }
+
+    .cards{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .mapaArea{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+
+    #inicio{
+        padding:20px;
+    }
+
+    .escolhas{
+        flex-direction:column;
+        width:100%;
+    }
+
+    .escolha{
+        width:100%;
+    }
+
+    .cards,
+    .acoes,
+    .resumoMotorista{
+        grid-template-columns:1fr;
+    }
+
+    .conteudo{
+        padding:5px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     TELA INICIAL
+===================================================== -->
+
+<div id="inicio">
+
+    <h1>Olá! 👋</h1>
+
+    <p>Você quer acessar como?</p>
+
+    <div class="escolhas">
+
+        <button class="escolha gerenteEscolha"
+                onclick="abrir('gerente')">
+
+            <div class="iconeEscolha">👤</div>
+
+            <h2>GERENTE</h2>
+
+            <p>Visão geral e gestão completa do sistema</p>
+
+        </button>
+
+
+        <button class="escolha operadorEscolha"
+                onclick="abrir('operador')">
+
+            <div class="iconeEscolha">👷</div>
+
+            <h2>OPERADOR</h2>
+
+            <p>Registra vistorias, manutenções e atualiza o sistema</p>
+
+        </button>
+
+
+        <button class="escolha motoristaEscolha"
+                onclick="abrir('motorista')">
+
+            <div class="iconeEscolha">🚚</div>
+
+            <h2>MOTORISTA</h2>
+
+            <p>Visualiza rotas e entrega ordens de serviço</p>
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     GERENTE
+===================================================== -->
+
+<div id="gerente" class="painel">
+
+    <button type="button" class="botaoVoltar" onclick="voltarInicio()">←</button>
+
+    <div class="cabecalho cabGerente">
+
+        <h1>👤 &nbsp; GERENTE</h1>
+
+        <p>Visão geral e gestão completa do sistema</p>
+
+    </div>
+
+
+    <div class="sistema">
+
+        <aside class="menu menuGerente">
+
+            <div class="logo">
+
+                <span class="logoIcon">🔥</span>
+                <strong>EXTINTORES</strong>
+
+                <span>Gestão e Manutenção</span>
+
+            </div>
+
+
+            <ul>
+
+                <li class="ativo">⌂ &nbsp; Início</li>
+                <li>♜ &nbsp; Extintores</li>
+                <li>♟ &nbsp; Clientes</li>
+                <li>▣ &nbsp; Ordens de Serviço</li>
+                <li>▤ &nbsp; Relatórios</li>
+                <li>♟ &nbsp; Funcionários</li>
+                <li>🚗 &nbsp; Veículos</li>
+                <li>⚙ &nbsp; Configurações</li>
+
+            </ul>
+
+
+            <div class="menuFinal">
+
+                <div class="usuario">
+
+                    <div class="avatar">●</div>
+
+                    <div>
+                        Carlos Silva<br>
+                        <small>Gerente</small>
+                    </div>
+
+                </div>
+
+                <div class="sair">
+                    ⇥ &nbsp; Sair
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <main class="conteudo">
+
+            <div class="barra">
+
+                <input class="pesquisa"
+                       placeholder="🔍  Pesquisar...">
+
+                <div class="icons">
+                    ♧ &nbsp; ◉
+                </div>
+
+            </div>
+
+
+            <div class="titulo">
+
+                <div class="saudar">
+
+                    <h2>Olá, Carlos!</h2>
+
+                    <p>Aqui está o resumo do sistema hoje.</p>
+
+                </div>
+
+                <p>
+                    16 de setembro de 2025<br>
+                    Terça-feira
+                </p>
+
+            </div>
+
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="cardTitulo">
+
+                        <div class="cardIcon vermelho">
+                            🧯
+                        </div>
+
+                        <div>
+                            Total de Extintores
+
+                            <div class="cardNumero">
+                                248
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="cardInfo">
+                        Em todas as unidades
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="cardTitulo">
+
+                        <div class="cardIcon verde">
+                            ✓
+                        </div>
+
+                        <div>
+                            Em Dia
+
+                            <div class="cardNumero">
+                                212
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="cardInfo">
+                        85,5% do total
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="cardTitulo">
+
+                        <div class="cardIcon amarelo">
+                            ⚠
+                        </div>
+
+                        <div>
+                            Em Atraso
+
+                            <div class="cardNumero">
+                                36
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="cardInfo">
+                        14,5% do total
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="cardTitulo">
+
+                        <div class="cardIcon azul">
+                            ▣
+                        </div>
+
+                        <div>
+                            Próximas Vistorias
+
+                            <div class="cardNumero">
+                                18
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="cardInfo">
+                        Nos próximos 7 dias
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="box">
+
+                <div class="boxTitulo">
+                    Status dos Extintores
+                </div>
+
+                <div class="grafico">
+
+                    <div class="donut">
+
+                        <div class="donutTexto">
+                            248
+                            <span>Total</span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="legenda">
+
+                        <div>
+                            <span class="bola" style="background:#16a36d"></span>
+                            Em dia &nbsp; 212 (85,5%)
+                        </div>
+
+                        <div>
+                            <span class="bola" style="background:#f5aa16"></span>
+                            Em atraso &nbsp; 36 (14,5%)
+                        </div>
+
+                        <div>
+                            <span class="bola" style="background:#68778a"></span>
+                            Inativo &nbsp; 0 (0%)
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="box">
+
+                <div class="boxTitulo">
+
+                    Ordens de Serviço Recentes
+
+                    <span class="verTodos">
+                        Ver todas
+                    </span>
+
+                </div>
+
+
+                <table>
+
+                    <tr>
+                        <th>Nº OS</th>
+                        <th>Cliente</th>
+                        <th>Tipo</th>
+                        <th>Status</th>
+                        <th>Data</th>
+                    </tr>
+
+                    <tr>
+                        <td>OS-0048</td>
+                        <td>Empresa ABC</td>
+                        <td>Recarga</td>
+                        <td>
+                            <span class="status azulStatus">
+                                Em andamento
+                            </span>
+                        </td>
+                        <td>16/09/2025</td>
+                    </tr>
+
+                    <tr>
+                        <td>OS-0047</td>
+                        <td>Posto Central</td>
+                        <td>Manutenção</td>
+                        <td>
+                            <span class="status amarelo">
+                                Pendente
+                            </span>
+                        </td>
+                        <td>15/09/2025</td>
+                    </tr>
+
+                    <tr>
+                        <td>OS-0046</td>
+                        <td>Condomínio Vista Bela</td>
+                        <td>Vistoria</td>
+                        <td>
+                            <span class="status verde">
+                                Concluída
+                            </span>
+                        </td>
+                        <td>14/09/2025</td>
+                    </tr>
+
+                    <tr>
+                        <td>OS-0045</td>
+                        <td>Indústria XYZ</td>
+                        <td>Recarga</td>
+                        <td>
+                            <span class="status verde">
+                                Concluída
+                            </span>
+                        </td>
+                        <td>12/09/2025</td>
+                    </tr>
+
+                    <tr>
+                        <td>OS-0044</td>
+                        <td>Escola Municipal</td>
+                        <td>Manutenção</td>
+                        <td>
+                            <span class="status amarelo">
+                                Pendente
+                            </span>
+                        </td>
+                        <td>10/09/2025</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+            <div class="box">
+
+                <div class="boxTitulo">
+
+                    Vencimentos (próximos 7 dias)
+
+                    <span class="verTodos">
+                        Ver todas
+                    </span>
+
+                </div>
+
+                <table>
+
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Tipo</th>
+                        <th>Data</th>
+                    </tr>
+
+                    <tr>
+                        <td>Condomínio Vista Bela</td>
+                        <td>Vistoria</td>
+                        <td>17/09/2025</td>
+                    </tr>
+
+                    <tr>
+                        <td>Posto Central</td>
+                        <td>Recarga</td>
+                        <td>18/09/2025</td>
+                    </tr>
+
+                    <tr>
+                        <td>Hospital São Lucas</td>
+                        <td>Vistoria</td>
+                        <td>19/09/2025</td>
+                    </tr>
+
+                    <tr>
+                        <td>Empresa ABC</td>
+                        <td>Recarga</td>
+                        <td>20/09/2025</td>
+                    </tr>
+
+                    <tr>
+                        <td>Escola Municipal</td>
+                        <td>Manutenção</td>
+                        <td>21/09/2025</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+            <div class="botoesInferiores">
+
+                <div class="botaoInferior">
+                    <span>♟</span>
+                    Novo Cliente
+                    <br>
+                    <small>Cadastrar um cliente</small>
+                </div>
+
+                <div class="botaoInferior">
+                    <span>▣</span>
+                    Nova OS
+                    <br>
+                    <small>Criar ordem de serviço</small>
+                </div>
+
+                <div class="botaoInferior">
+                    <span>▤</span>
+                    Relatórios
+                    <br>
+                    <small>Gerar relatórios</small>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     OPERADOR
+===================================================== -->
+
+<div id="operador" class="painel">
+
+    <button type="button" class="botaoVoltar" onclick="voltarInicio()">←</button>
+
+    <div class="cabecalho cabOperador">
+
+        <h1>👷 &nbsp; OPERADOR</h1>
+
+        <p>Registra vistorias, manutenções e atualiza o sistema</p>
+
+    </div>
+
+
+    <div class="sistema">
+
+        <aside class="menu menuOperador">
+
+            <div class="logo">
+
+                <span class="logoIcon">🔥</span>
+                <strong>EXTINTORES</strong>
+
+                <span>Gestão e Manutenção</span>
+
+            </div>
+
+
+            <ul>
+
+                <li class="ativo">⌂ &nbsp; Início</li>
+                <li>▣ &nbsp; Vistorias</li>
+                <li>⚒ &nbsp; Manutenções</li>
+                <li>♥ &nbsp; Ordens de Serviço</li>
+                <li>♜ &nbsp; Extintores</li>
+                <li>♟ &nbsp; Clientes</li>
+                <li>▣ &nbsp; Fotos</li>
+
+            </ul>
+
+
+            <div class="menuFinal">
+
+                <div class="usuario">
+
+                    <div class="avatar">●</div>
+
+                    <div>
+                        João Pereira<br>
+                        <small>Operador</small>
+                    </div>
+
+                </div>
+
+                <div class="sair">
+                    ⇥ &nbsp; Sair
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <main class="conteudo">
+
+            <div class="barra">
+
+                <input class="pesquisa"
+                       placeholder="🔍  Pesquisar...">
+
+                <div class="icons">
+                    ♧
+                </div>
+
+            </div>
+
+
+            <div class="titulo">
+
+                <h2>Vistorias e Manutenções</h2>
+
+            </div>
+
+
+            <div class="acoes">
+
+                <div class="acao acaoVerde">
+
+                    <div style="font-size:22px">
+                        ✓
+                    </div>
+
+                    <h3>Registrar Vistoria</h3>
+
+                    <p>
+                        Verificar e atualizar o status do extintor
+                    </p>
+
+                </div>
+
+
+                <div class="acao acaoAzul">
+
+                    <div style="font-size:22px">
+                        🔧
+                    </div>
+
+                    <h3>Registrar Manutenção</h3>
+
+                    <p>
+                        Adicionar manutenção ou recarga
+                    </p>
+
+                </div>
+
+
+                <div class="acao acaoCinza">
+
+                    <div style="font-size:22px">
+                        📷
+                    </div>
+
+                    <h3>Fotos</h3>
+
+                    <p>
+                        Registrar fotos do serviço
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="box">
+
+                <div class="boxTitulo">
+
+                    Extintores para Verificação
+
+                    <span class="verTodos">
+                        Ver todos
+                    </span>
+
+                </div>
+
+
+                <table>
+
+                    <tr>
+                        <th>Código</th>
+                        <th>Cliente</th>
+                        <th>Tipo</th>
+                        <th>Status</th>
+                        <th>Ação</th>
+                    </tr>
+
+                    <tr>
+                        <td>EXT-001</td>
+                        <td>Empresa ABC</td>
+                        <td>PQS</td>
+                        <td>
+                            <span class="status verde">
+                                Em dia
+                            </span>
+                        </td>
+                        <td>🔵 &nbsp; 🟢</td>
+                    </tr>
+
+                    <tr>
+                        <td>EXT-002</td>
+                        <td>Posto Central</td>
+                        <td>CO₂</td>
+                        <td>
+                            <span class="status amarelo">
+                                Em atraso
+                            </span>
+                        </td>
+                        <td>🔵 &nbsp; 🟢</td>
+                    </tr>
+
+                    <tr>
+                        <td>EXT-003</td>
+                        <td>Condomínio Vista Bela</td>
+                        <td>Água</td>
+                        <td>
+                            <span class="status verde">
+                                Em dia
+                            </span>
+                        </td>
+                        <td>🔵 &nbsp; 🟢</td>
+                    </tr>
+
+                    <tr>
+                        <td>EXT-004</td>
+                        <td>Indústria XYZ</td>
+                        <td>PQS</td>
+                        <td>
+                            <span class="status amarelo">
+                                Em atraso
+                            </span>
+                        </td>
+                        <td>🔵 &nbsp; 🟢</td>
+                    </tr>
+
+                    <tr>
+                        <td>EXT-005</td>
+                        <td>Hospital São Lucas</td>
+                        <td>CO₂</td>
+                        <td>
+                            <span class="status verde">
+                                Em dia
+                            </span>
+                        </td>
+                        <td>🔵 &nbsp; 🟢</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+            <div class="box">
+
+                <div class="boxTitulo">
+
+                    Últimas Vistorias
+
+                    <span class="verTodos">
+                        Ver todas
+                    </span>
+
+                </div>
+
+
+                <table>
+
+                    <tr>
+                        <th>Data</th>
+                        <th>Extintor</th>
+                        <th>Cliente</th>
+                        <th>Resultado</th>
+                    </tr>
+
+                    <tr>
+                        <td>16/09/2025</td>
+                        <td>EXT-012</td>
+                        <td>Empresa ABC</td>
+                        <td>
+                            <span class="status verde">
+                                Conforme
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>15/09/2025</td>
+                        <td>EXT-009</td>
+                        <td>Posto Central</td>
+                        <td>
+                            <span class="status verde">
+                                Conforme
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>14/09/2025</td>
+                        <td>EXT-023</td>
+                        <td>Condomínio Vista Bela</td>
+                        <td>
+                            <span class="status vermelhoStatus">
+                                Não Conforme
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>13/09/2025</td>
+                        <td>EXT-017</td>
+                        <td>Indústria XYZ</td>
+                        <td>
+                            <span class="status verde">
+                                Conforme
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>12/09/2025</td>
+                        <td>EXT-006</td>
+                        <td>Hospital São Lucas</td>
+                        <td>
+                            <span class="status verde">
+                                Conforme
+                            </span>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+            <div class="infoBox">
+
+                <strong>ⓘ &nbsp; Lembrete</strong>
+
+                <br><br>
+
+                O extintor EXT-023 está em não conformidade.
+                Verifique o motivo e registre a manutenção.
+
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MOTORISTA
+===================================================== -->
+
+<div id="motorista" class="painel">
+
+    <button type="button" class="botaoVoltar" onclick="voltarInicio()">←</button>
+
+    <div class="cabecalho cabMotorista">
+
+        <h1>🚚 &nbsp; MOTORISTA</h1>
+
+        <p>Visualiza rotas e entrega ordens de serviço</p>
+
+    </div>
+
+
+    <div class="sistema">
+
+        <aside class="menu menuMotorista">
+
+            <div class="logo">
+
+                <span class="logoIcon">🔥</span>
+                <strong>EXTINTORES</strong>
+
+                <span>Gestão e Manutenção</span>
+
+            </div>
+
+
+            <ul>
+
+                <li class="ativo">⌂ &nbsp; Início</li>
+                <li>📍 &nbsp; Rotas</li>
+                <li>▣ &nbsp; Ordens de Serviço</li>
+                <li>♟ &nbsp; Clientes</li>
+                <li>▤ &nbsp; Comprovantes</li>
+                <li>🚗 &nbsp; Veículo</li>
+
+            </ul>
+
+
+            <div class="menuFinal">
+
+                <div class="usuario">
+
+                    <div class="avatar">●</div>
+
+                    <div>
+                        Roberto Almeida<br>
+                        <small>Motorista</small>
+                    </div>
+
+                </div>
+
+                <div class="sair">
+                    ⇥ &nbsp; Sair
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <main class="conteudo">
+
+            <div class="barra">
+
+                <input class="pesquisa"
+                       placeholder="🔍  Pesquisar...">
+
+                <div class="icons">
+                    ♧ &nbsp; ◉
+                </div>
+
+            </div>
+
+
+            <div class="titulo">
+
+                <div>
+
+                    <h2>🗺️ &nbsp; Minha Rota de Hoje</h2>
+
+                </div>
+
+                <p>
+                    16 de setembro de 2025<br>
+                    Terça-feira
+                </p>
+
+            </div>
+
+
+            <div class="resumoMotorista">
+
+                <div class="miniCard">
+
+                    <div class="miniIcon">
+                        ▣
+                    </div>
+
+                    <div>
+                        <strong>5</strong>
+                        <span>Ordens de Serviço</span>
+                    </div>
+
+                </div>
+
+
+                <div class="miniCard">
+
+                    <div class="miniIcon">
+                        ♟
+                    </div>
+
+                    <div>
+                        <strong>4</strong>
+                        <span>Clientes</span>
+                    </div>
+
+                </div>
+
+
+                <div class="miniCard">
+
+                    <div class="miniIcon">
+                        📍
+                    </div>
+
+                    <div>
+                        <strong>128 km</strong>
+                        <span>Distância estimada</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="box">
+
+                <div class="mapaArea">
+
+                    <div class="mapa">
+
+                        <div class="rua r1"></div>
+                        <div class="rua r2"></div>
+                        <div class="rua r3"></div>
+                        <div class="rua r4"></div>
+
+                        <div class="ponto p1">5</div>
+                        <div class="ponto p2">3</div>
+                        <div class="ponto p3">3</div>
+                        <div class="ponto p4">2</div>
+                        <div class="ponto p5">5</div>
+
+                    </div>
+
+
+                    <div class="rotas">
+
+                        <div class="rota">
+
+                            <div class="numero">1</div>
+
+                            <div class="rotaTexto">
+
+                                <strong>Empresa ABC</strong>
+
+                                <span>
+                                    OS-0048<br>
+                                    08:00 - 09:00
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="rota">
+
+                            <div class="numero">2</div>
+
+                            <div class="rotaTexto">
+
+                                <strong>Posto Central</strong>
+
+                                <span>
+                                    OS-0047<br>
+                                    09:30 - 10:30
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="rota">
+
+                            <div class="numero">3</div>
+
+                            <div class="rotaTexto">
+
+                                <strong>Condomínio Vista Bela</strong>
+
+                                <span>
+                                    OS-0046<br>
+                                    11:00 - 12:00
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="rota">
+
+                            <div class="numero">4</div>
+
+                            <div class="rotaTexto">
+
+                                <strong>Indústria XYZ</strong>
+
+                                <span>
+                                    OS-0045<br>
+                                    13:30 - 15:00
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="rota">
+
+                            <div class="numero">5</div>
+
+                            <div class="rotaTexto">
+
+                                <strong>Escola Municipal</strong>
+
+                                <span>
+                                    OS-0044<br>
+                                    15:30 - 16:30
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="box">
+
+                <div class="boxTitulo">
+
+                    ▣ &nbsp; Ordens de Serviço do Dia
+
+                    <span class="verTodos">
+                        Ver todas
+                    </span>
+
+                </div>
+
+
+                <table>
+
+                    <tr>
+                        <th>Nº OS</th>
+                        <th>Cliente</th>
+                        <th>Tipo</th>
+                        <th>Horário</th>
+                        <th>Status</th>
+                    </tr>
+
+                    <tr>
+                        <td>OS-0048</td>
+                        <td>Empresa ABC</td>
+                        <td>Recarga</td>
+                        <td>08:00 - 09:00</td>
+                        <td>
+                            <span class="status azulStatus">
+                                Em andamento
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>OS-0047</td>
+                        <td>Posto Central</td>
+                        <td>Manutenção</td>
+                        <td>09:30 - 10:30</td>
+                        <td>
+                            <span class="status amarelo">
+                                Pendente
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>OS-0046</td>
+                        <td>Condomínio Vista Bela</td>
+                        <td>Vistoria</td>
+                        <td>11:00 - 12:00</td>
+                        <td>
+                            <span class="status amarelo">
+                                Pendente
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>OS-0045</td>
+                        <td>Indústria XYZ</td>
+                        <td>Recarga</td>
+                        <td>13:30 - 15:00</td>
+                        <td>
+                            <span class="status amarelo">
+                                Pendente
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>OS-0044</td>
+                        <td>Escola Municipal</td>
+                        <td>Manutenção</td>
+                        <td>15:30 - 16:30</td>
+                        <td>
+                            <span class="status amarelo">
+                                Pendente
+                            </span>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+            <div class="infoBox">
+
+                <strong>💡 &nbsp; Dicas</strong>
+
+                <br><br>
+
+                Mantenha os comprovantes de entrega e assine no recibo do cliente.
+                Em caso de imprevistos, entre em contato com o gerente.
+
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script>
+
+function abrir(tipo){
+
+    document.getElementById("inicio").style.display = "none";
+
+    document.querySelectorAll(".painel").forEach(function(painel){
+
+        painel.classList.remove("ativo");
+
+    });
+
+    document.getElementById(tipo).classList.add("ativo");
+
+}
+
+function voltarInicio(){
+
+    document.querySelectorAll(".painel").forEach(function(painel){
+
+        painel.classList.remove("ativo");
+
+    });
+
+    document.getElementById("inicio").style.display = "flex";
+
+}
+
+</script>
+
+</body>
+</html>
